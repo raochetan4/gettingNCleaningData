@@ -1,22 +1,45 @@
-###
-Collect, work with, and clean a data set
-Prepare tidy data that can be used for later analysis. 
-You will be required to submit: 
-1) a tidy data set as described below, 
-2) a link to a Github repository with your script for performing the analysis
-3) a code book that describes the variables, the data, and any transformations or work that you performed to clean up the data called CodeBook.md. 
-4) You should also include a README.md in the repo with your scripts. This repo explains how all of the scripts work and how they are connected.  
+#### Part1: Merges the training and the test sets to create one data set.
+##### Approach: Creating another folder which reads the text files and writes the files in a new folder mergedData
 
-Wearable computing: Accelerometers from the Samsung Galaxy S smartphone.
+#### Feature Vector mapping
+features
 
-https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+#### Merge test and train and write under UCI HAR Dataset/
+mergedDataSet in for loop
 
-You should create one R script called run_analysis.R that does the following. 
-Merges the training and the test sets to create one data set.
-Extracts only the measurements on the mean and standard deviation for each measurement. 
-Uses descriptive activity names to name the activities in the data set
-Appropriately labels the data set with descriptive variable names. 
-From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-Good luck!
-###
+##### Appended X_test_train which has 561 feature vector as Columns and each row describes activity label
+mergedData<- "X_train_X_test.txt" and column names = features
+
+####Part2: Extracts only the measurements on the mean and standard deviation for each measurement. 
+##### Approach: find all the column names with "mean" and "std" strings and patch the mergedData with only these columns
+
+find stdCol and meanCol 
+
+rewrite the mergeData using above stdCol and meanCol
+
+####Part 3: Uses descriptive activity names to name the activities in the data set
+##### Approach: use activity_labels.txt and replace the activity ids in y_train_y_test.txt with the activity label mapping
+use ACTIVITYLABEL from activity_label.txt and find the equivalent labels for y_train_y_test.txt yActivityLabel
+
+
+####Part 4: Appropriately label the data set with descriptive variable names.
+#####Approach: Get appropriate column names and write them to each individual column: Activity subject Mean and Std Columns. Finally create tidyDataSet
+
+#### Subject mapping
+subject <- subject_train_subject_test.txt
+
+#### Patching column names from feature vector names
+
+colnames(mergedData)<- features[sort(c(stdCol,meanCol)),2]
+colnames(yActivityLabel) <- "activityLabel"
+colnames(subject)<-'subjectNumber'
+
+
+#### Create Tidy DataSet
+tidyDataSet <- subject,yActivityLabel,mergedData
+tidyDataSet1_train_test.txt
+
+#### Part5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+tidyDataSet2<-aggregate(. ~subjectNumber + activityLabel, tidyDataSet, mean)
+tidyDataSet2_train_test_Avg-Subj-Act.txt'
